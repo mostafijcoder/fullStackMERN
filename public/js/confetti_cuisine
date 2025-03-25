@@ -1,0 +1,23 @@
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("Website Loaded Successfully");
+
+    // Add interactivity for the navigation links
+    let navLinks = document.querySelectorAll("nav a");
+    navLinks.forEach(link => {
+        link.addEventListener("mouseover", function () {
+            this.style.backgroundColor = "#0056b3";
+        });
+        link.addEventListener("mouseout", function () {
+            this.style.backgroundColor = "#007BFF";
+        });
+    });
+
+    // Display an alert on form submission
+    let form = document.querySelector("form");
+    if (form) {
+        form.addEventListener("submit", function (event) {
+            alert("Thank you for your submission!");
+        });
+    }
+});
+
