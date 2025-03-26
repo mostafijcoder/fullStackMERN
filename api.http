@@ -1,0 +1,37 @@
+### POST Request: Create a new item ###
+ POST http://localhost:3011/
+
+ Content-Type: application/json
+
+ {
+   "name": "New Item",
+   "price": 19.99
+ }
+ 
+
+ ### GET Request: Get all items ###
+
+ GET http://localhost:3011/
+
+ 
+ 
+ ### GET Request: Get a specific item by ID
+ GET http://localhost:3014/items/1
+ 
+ 
+ ### PUT Request: Update an item by ID
+ PUT http://localhost:3014/items/1
+ Content-Type: application/json
+ 
+ {
+   "name": "Updated Item Name",
+   "price": 24.99
+ }
+ 
+ 
+ ### DELETE Request: Delete an item by ID
+ DELETE http://localhost:3014/items/1
+ 
+ 
+ ### OPTIONS Request: Get supported HTTP methods for /items (if supported by your server)
+ OPTIONS http://localhost:3014/items
