@@ -3,7 +3,8 @@ exports.sendReqParam = (req, res) => {
     res.send(`This is the page for ${vegetable}`);
 };
 // Rendering a view from a controller action in homeController.js
+
 exports.respondWithName = (req, res) => {
     let paramsName = req.params.myName;
-    res.render("index", { name: paramsName });
-}
+    res.render("index", { name: paramsName, title: "User Page" }); // Pass title
+};

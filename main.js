@@ -1,18 +1,21 @@
 const express = require("express");
 const homeController = require("./controllers/homeControllers"); // Corrected file name
 const app = express();
+const layouts = require("express-ejs-layouts");
+app.use(layouts);
 
 const port = process.env.PORT || 3011;
 
 // Set EJS as the template engine
 app.set("view engine", "ejs");
-
+app.set("layout", "layout"); // Set the default layout file to views/layout.ejs
+/*
 // Middleware to parse URL-encoded and JSON data
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Serve static files from the public directory
-app.use(express.static("public"));
+app.use(express.static("public")); */
 
 // Log each request to the console
 app.use((req, res, next) => {
