@@ -1,5 +1,6 @@
 const express = require("express");
 const homeController = require("./controllers/homeController"); // Corrected file name
+const errorController = require("./controllers/errorController");
 const app = express();
 const layouts = require("express-ejs-layouts");
 app.use(layouts);
@@ -16,6 +17,7 @@ app.use(express.json()); */
 
 // Serve static files from the public directory
 app.use(express.static("public"));
+app.use(errorController.logErrors)
 
 // Log each request to the console
 app.use((req, res, next) => {

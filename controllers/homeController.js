@@ -5,7 +5,7 @@ exports.sendReqParam = (req, res) => {
 // Rendering a view from a controller action in homeController.js
 
 exports.respondWithName = (req, res) => {
-    let paramsName = req.params.myName;
+    //let paramsName = req.params.myName;
     res.render("index", { name: paramsName, title: "User Page" }); // Pass title
 };
 
@@ -14,6 +14,6 @@ exports.homePage = (req, res) => {
 };
 
 exports.respondWithName = (req, res) => {
-    let paramsName = req.params.myName;
+    //let paramsName = req.params.myName;
     res.render("index", { title: `Hello, ${paramsName}`, name: paramsName, showNotification: true });
 };
