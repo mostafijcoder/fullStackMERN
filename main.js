@@ -13,17 +13,56 @@ app.set("layout", "layout"); // Set the default layout file to views/layout.ejs
 /*
 // Middleware to parse URL-encoded and JSON data
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json()); */
-
-// Serve static files from the public directory
-app.use(express.static("public"));
-app.use(errorController.logErrors)
-
+app.use(express.json()); 
+*/
 // Log each request to the console
 app.use((req, res, next) => {
     console.log(`Request made to: ${req.url}`);
     next();
 });
+
+// Route for homepage
+app.get("/", homeController.homePage);
+
+app.get("/", (req, res) => {
+    res.render("index", { title: "Home", showNotification: true });
+});
+
+app.get("/contact", (req, res) => {
+    res.render("contact", { title: "Contact Us", showNotification: true });
+});
+
+// Form submission handling
+app.post("/contact", (req, res) => {
+    console.log(req.body); // Handle form data (save to DB, send email, etc.)
+    res.send("Thank you for contacting us!");
+});
+
+// Route to render index.ejs
+app.get("/", (req, res) => {
+    res.render("index"); // Render index.ejs from the views folder
+});
+
+// Example route with parameter handling
+app.get("/items/:vegetable", homeController.sendReqParam);
+
+// Route to render a view with a parameter
+
+app.get("/name/:myName", homeController.respondWithName);
+// Serve static files from the public directory
+app.use(express.static("public"));
+// ✅ Handle 404 Errors
+app.use((req, res) => {
+    res.status(404).render("404", { title: "Page Not Found", showNotification: true });
+});
+
+// ✅ Handle 500 Errors
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).render("500", { title: "Server Error", showNotification: true });
+});
+
+
 
 // Route for homepage
 app.get("/", homeController.homePage);
