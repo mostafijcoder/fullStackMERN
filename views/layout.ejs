@@ -3,17 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title || "Welcome" %></title>
+    <title><%= title || "Recipe App" %></title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div id="nav">
-        <a href="/">Home</a> | 
-        <a href="/about">About</a> | 
-        <a href="/contact">Contact</a>
-    </div>
+    <%- include("partials/navigation") %> <!-- ✅ Fixed include syntax -->
 
-    <%- body %> <!-- This is where the page content will be injected -->
+    <% if (showNotification) { %>
+        <%- include("partials/notification") %> <!-- ✅ Fixed include syntax -->
+    <% } %>
 
-    <div id="footer">FOOTER</div>
+    <main>
+        <%- body %> <!-- Page-specific content will be inserted here -->
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Confetti Cuisine</p>
+    </footer>
 </body>
 </html>

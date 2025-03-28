@@ -1,0 +1,50 @@
+/* Reset some basic styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+/* Navbar styles */
+.navbar {
+    background-color: #ff5733;
+    padding: 10px;
+    text-align: center;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+/* Notification box */
+.notification {
+    background-color: #ffcc00;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Main content */
+main {
+    padding: 20px;
+    text-align: center;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+}

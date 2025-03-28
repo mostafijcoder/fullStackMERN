@@ -1,5 +1,5 @@
 const express = require("express");
-const homeController = require("./controllers/homeControllers"); // Corrected file name
+const homeController = require("./controllers/homeController"); // Corrected file name
 const app = express();
 const layouts = require("express-ejs-layouts");
 app.use(layouts);
@@ -12,16 +12,19 @@ app.set("layout", "layout"); // Set the default layout file to views/layout.ejs
 /*
 // Middleware to parse URL-encoded and JSON data
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(express.json()); */
 
 // Serve static files from the public directory
-app.use(express.static("public")); */
+app.use(express.static("public"));
 
 // Log each request to the console
 app.use((req, res, next) => {
     console.log(`Request made to: ${req.url}`);
     next();
 });
+
+// Route for homepage
+app.get("/", homeController.homePage);
 
 // Route to render index.ejs
 app.get("/", (req, res) => {
