@@ -26,6 +26,20 @@ app.use((req, res, next) => {
 // Route for homepage
 app.get("/", homeController.homePage);
 
+app.get("/", (req, res) => {
+    res.render("index", { title: "Home", showNotification: true });
+});
+
+app.get("/contact", (req, res) => {
+    res.render("contact", { title: "Contact Us", showNotification: true });
+});
+
+// Form submission handling
+app.post("/contact", (req, res) => {
+    console.log(req.body); // Handle form data (save to DB, send email, etc.)
+    res.send("Thank you for contacting us!");
+});
+
 // Route to render index.ejs
 app.get("/", (req, res) => {
     res.render("index"); // Render index.ejs from the views folder
