@@ -5,10 +5,10 @@ const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
 
 // Database Name
-const dbName = 'testmongodb';
+const dbName = 'receipe_mongodb';
 
 // Sample Data
-const demoPerson = { name: 'John', lastName: 'Smith' };
+const demoPerson = { name: 'John', email: 'mithsmith@gmail.com' };
 const findKey = { name: 'John' };
 
 async function main() {
@@ -19,7 +19,7 @@ async function main() {
 
         // Select Database & Collection
         const db = client.db(dbName);
-        const collection = db.collection('hapsa');
+        const collection = db.collection('contacts');
 
         // Insert a document
         const insertResult = await collection.insertOne(demoPerson);

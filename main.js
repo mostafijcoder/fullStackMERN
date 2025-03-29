@@ -1,9 +1,54 @@
 const express = require("express");
 const homeController = require("./controllers/homeController"); // Corrected file name
 const errorController = require("./controllers/errorController");
+const Subscriber = require("./models/subscriber")
 const app = express();
 const layouts = require("express-ejs-layouts");
 app.use(layouts);
+
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost:27017/receipe_mongodb", {
+    useUnifiedTopology: true, // ✅ No need for `useNewUrlParser`
+})
+.then(() => console.log("✅ Successfully connected to MongoDB!"))
+.catch(err => console.error("❌ MongoDB connection error:", err));
+
+const db = mongoose.connection;
+
+const createSubscribers = async () => {
+    try {
+        const subscriber1 = new Subscriber({
+            name: "Jon Wexler",
+            email: "jon@jonwexler.com"
+        });
+
+        const savedSubscriber = await subscriber1.save(); // ✅ Use await
+        console.log("✅ Saved Subscriber:", savedSubscriber);
+
+        const subscriber2 = await Subscriber.create({
+            name: "Jane Doe",
+            email: "jane@example.com"
+        });
+
+        console.log("✅ Created Subscriber:", subscriber2);
+    } catch (error) {
+        console.error("❌ Error creating subscriber:", error);
+    }
+};
+
+createSubscribers();
+
+const findWexler=Subscriber.findOne({ name: "Jon Wexler" })
+    .where("email", /wexler/)
+    .then(data => {
+        if (data) console.log("✅ Found Subscriber:", data.name);
+        else console.log("❌ No Subscriber found.");
+    })
+    .catch(error => console.error("Error fetching subscriber:", error));
+
+
+
 
 const port = process.env.PORT || 3011;
 
