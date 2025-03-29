@@ -21,6 +21,10 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get("/courses", homeController.showCourses);
+
+app.post("/contact", homeController.postedSignUpForm);
+
 // Route for homepage
 app.get("/", homeController.homePage);
 
