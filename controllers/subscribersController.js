@@ -13,3 +13,24 @@ exports.getAllSubscribers = async (req, res) => {
     res.status(500).send("Error retrieving subscribers.");
   }
 };
+exports.getSubscriptionPage = (req, res) => {
+    res.render("contact");
+   };
+   exports.saveSubscriber = async (req, res) => {
+    try {
+        const newSubscriber = new Subscriber({
+            name: req.body.name,
+            email: req.body.email,
+            zipCode: req.body.zipCode
+        });
+
+        await newSubscriber.save(); // ✅ Use await instead of callback
+
+        console.log("✅ Subscriber saved:", newSubscriber);
+        res.redirect("/subscribers"); // Redirect to subscribers list
+    } catch (error) {
+        console.error("❌ Error saving subscriber:", error);
+        res.status(500).send("Error saving subscriber.");
+    }
+};
+

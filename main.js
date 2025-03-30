@@ -45,6 +45,8 @@ app.get("/name/:myName", homeController.respondWithName);
 
 // ✅ Fix Subscriber Route
 app.get("/subscribers", subscribersController.getAllSubscribers);
+app.get("/contact", subscribersController.getSubscriptionPage);
+app.post("/subscribe", subscribersController.saveSubscriber);
 
 // ✅ Handle 404 Errors
 app.use((req, res) => {

@@ -8,6 +8,7 @@
                 <th>Serial No.</th>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Zip Code</th>  
             </tr>
         </thead>
         <tbody>
@@ -16,6 +17,7 @@
                     <td><%= index + 1 %></td>  <!-- ✅ Serial Number -->
                     <td><%= subscriber.name %></td>
                     <td><%= subscriber.email %></td>
+                    <td><%= subscriber.zipCode %></td>
                 </tr>
             <% }); %>
         </tbody>
