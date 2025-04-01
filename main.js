@@ -4,16 +4,17 @@ const errorController = require("./controllers/errorController");
 const Subscriber = require("./models/subscriber");
 const subscribersController = require("./controllers/subscribersController");
 
+
 const app = express();
 const layouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
-
+mongoose.Promise= global.Promise;
 app.use(layouts);
 
 // ✅ MongoDB Connection
 mongoose
   .connect("mongodb://localhost:27017/receipe_mongodb", {
-    useUnifiedTopology: true,
+    useNewUrlParser: true,
   })
   .then(() => console.log("✅ Successfully connected to MongoDB!"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
@@ -47,6 +48,8 @@ app.get("/name/:myName", homeController.respondWithName);
 app.get("/subscribers", subscribersController.getAllSubscribers);
 app.get("/contact", subscribersController.getSubscriptionPage);
 app.post("/subscribe", subscribersController.saveSubscriber);
+app.get("/subscribers/zip/:zipCode", subscribersController.getLocalSubscribers);
+
 
 // ✅ Handle 404 Errors
 app.use((req, res) => {
