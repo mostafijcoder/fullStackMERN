@@ -1,4 +1,9 @@
+const mongoose = require("mongoose");
 const Subscriber = require("../models/subscriber");
+const Course = require("../models/course"); // ✅ Import the Course model
+
+
+
 
 // Controller function for handling subscriber search
 exports.getSubscribers = async (req, res) => {
@@ -54,9 +59,6 @@ exports.getAllSubscribers = async (req, res) => {
     }
 };
 
-
-
-
 exports.getSubscriptionPage = (req, res) => {
     res.render("contact");
 };
@@ -83,19 +85,94 @@ exports.saveSubscriber = (req, res) => {
         });
 };
 
-exports.getLocalSubscribers = (req, res) => {
-    const zipCode = parseInt(req.params.zipCode); // Get ZIP code from request params
-    console.log(`🔍 Searching for subscribers in ZIP: ${zipCode}`);
 
-    Subscriber.findLocalSubscribers(zipCode) // ✅ Use static method
-        .then((subscribers) => {
-            console.log("✅ Subscribers found:", subscribers);
-            
-                return res.json(subscribers);
-    
-        })
-        .catch((error) => {
-            console.error("❌ Error finding subscribers:", error);
-            res.status(500).send("Error finding subscribers.");
+
+// ✅ Get local subscribers by zip code
+exports.getLocalSubscribers = async (req, res) => {
+    try {
+        const { zipCode } = req.query;  // Get zip code from query parameters
+        const subscribers = await Subscriber.findLocalSubscribers(zipCode);
+
+        res.json({
+            message: `Subscribers in zip code ${zipCode}`,
+            subscribers: subscribers.map(sub => sub.getInfo())
         });
+    } catch (error) {
+        console.error("❌ Error fetching local subscribers:", error);
+        res.status(500).json({ message: "Error fetching local subscribers." });
+    }
+};
+
+// ✅ Render Enrollment Page
+exports.getEnrollmentPage = async (req, res) => {
+    try {
+        if (mongoose.connection.readyState !== 1) {
+            throw new Error("MongoDB is not connected yet.");
+          }
+        const subscribers = await Subscriber.find({});
+        const courses = await Course.find({});
+        res.render("enroll", { title: "Enroll in a Course", subscribers, courses, showNotification: false });
+    } catch (error) {
+        console.error("❌ Error loading enrollment page:", error);
+        res.status(500).send("Error loading enrollment page.");
+    }
+};
+
+
+// Enroll a subscriber in a course
+exports.enrollSubscriberToCourse = async (req, res) => {
+    try {
+      const { name, email, zipCode, courseId } = req.body;
+  
+      if (!name || !email || !zipCode || !courseId) {
+        return res.status(400).send("All fields are required!");
+      }
+  
+      let subscriber = await Subscriber.findOne({ email });
+  
+      if (!subscriber) {
+        subscriber = await Subscriber.create({ name, email, zipCode, courses: [courseId] });
+      } else {
+        if (!subscriber.courses.includes(courseId)) {
+          subscriber.courses.push(courseId);
+        }
+        await subscriber.save();
+      }
+  
+      res.redirect("/thanks"); // Redirect to a thank-you page
+    } catch (error) {
+      console.error("❌ Error enrolling subscriber to course:", error);
+      res.status(500).send("Error enrolling in the course.");
+    }
+  };
+
+// Get subscriber with course details
+exports.getSubscriberWithCourses = async (req, res) => {
+    try {
+        const subscriberId = req.params.id; // Get subscriber ID from request
+
+        // Find the subscriber and populate course details
+        const subscriber = await Subscriber.findById(subscriberId).populate("courses");
+
+        if (!subscriber) {
+            return res.status(404).json({ message: "Subscriber not found." });
+        }
+
+        res.json(subscriber);
+
+    } catch (error) {
+        console.error("❌ Error fetching subscriber with courses:", error);
+        res.status(500).send("Error fetching subscriber.");
+    }
+};
+
+
+exports.showEnrollPage = async (req, res) => {
+    try {
+        const courses = await Course.find(); // Fetch all courses from DB
+        res.render("enroll", { courses, showNotification: false });
+    } catch (error) {
+        console.error("Error fetching courses:", error);
+        res.render("enroll", { courses: [], showNotification: false, error: "Failed to load courses." });
+    }
 };

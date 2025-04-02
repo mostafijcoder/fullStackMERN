@@ -1,0 +1,19 @@
+.container {
+    max-width: 500px;
+    margin: auto;
+    text-align: center;
+}
+
+select, input, button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}

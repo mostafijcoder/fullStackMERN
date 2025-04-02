@@ -9,7 +9,8 @@
 <body>
     <%- include("partials/navigation") %> <!-- ✅ Fixed include syntax -->
 
-    <% if (showNotification) { %>
+    <% if (typeof showNotification !== "undefined" && showNotification) { %>
+
         <%- include("partials/notification") %> <!-- ✅ Fixed include syntax -->
     <% } %>
 

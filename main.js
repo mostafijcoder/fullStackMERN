@@ -3,6 +3,7 @@ const homeController = require("./controllers/homeController");
 const errorController = require("./controllers/errorController");
 const Subscriber = require("./models/subscriber");
 const subscribersController = require("./controllers/subscribersController");
+const seedCourses = require("./seedCourses");
 
 
 const app = express();
@@ -11,13 +12,28 @@ const mongoose = require("mongoose");
 mongoose.Promise= global.Promise;
 app.use(layouts);
 
-// ✅ MongoDB Connection
+// ✅ Connect to MongoDB first
 mongoose
   .connect("mongodb://localhost:27017/receipe_mongodb", {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
-  .then(() => console.log("✅ Successfully connected to MongoDB!"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+  .then(async () => {
+    console.log("✅ Successfully connected to MongoDB!");
+
+    // ✅ Seed the database only once
+    await seedCourses();
+
+    // ✅ Start the server after DB is ready
+    const port = process.env.PORT || 3011;
+    app.listen(port, () => {
+      console.log(`🚀 Server is running on http://localhost:${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err);
+    process.exit(1); // Exit process if DB fails to connect
+  });
 
 // ✅ Set EJS as the template engine
 app.set("view engine", "ejs");
@@ -49,6 +65,18 @@ app.get("/subscribers", subscribersController.getAllSubscribers);
 app.get("/contact", subscribersController.getSubscriptionPage);
 app.post("/subscribe", subscribersController.saveSubscriber);
 app.get("/subscribers/zip/:zipCode", subscribersController.getLocalSubscribers);
+app.get("/subscribers/local", subscribersController.getLocalSubscribers);
+
+// Course Enrollment Routes
+app.post("/enroll", subscribersController.enrollSubscriberToCourse);
+app.get("/subscribers/:id/courses", subscribersController.getSubscriberWithCourses);
+app.get("/enroll", subscribersController.getEnrollmentPage);
+app.get("/enroll", (req, res) => {
+    res.render("enroll", { showNotification: false }); // Ensuring showNotification is always available
+});
+app.get("/enroll", subscribersController.showEnrollPage);
+
+
 
 
 // ✅ Handle 404 Errors
@@ -62,8 +90,3 @@ app.use((err, req, res, next) => {
   res.status(500).render("500", { title: "Server Error", showNotification: true });
 });
 
-// ✅ Start the Server
-const port = process.env.PORT || 3011;
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
