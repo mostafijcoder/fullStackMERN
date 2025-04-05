@@ -1,0 +1,38 @@
+<h1>Contact Submissions</h1>
+
+<form action="/contacts/search" method="GET">
+    <input type="text" name="email" placeholder="Search by email" />
+    <button type="submit">Search</button>
+</form>
+
+<!-- Button to show all contacts -->
+<form action="/contacts" method="GET" style="display: inline;">
+    <button type="submit">Show All Contacts</button>
+</form>
+<!-- Button to show contacts and search by email and style the table -->
+<table>
+    <thead>
+        <tr>
+            <th>Serial No.</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>  
+            <th>Created At</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% contacts.forEach((contact, index) => { %>
+            <tr>
+                <td><%= index + 1 %></td>  <!-- Serial Number -->
+                <td><%= contact.name %></td>
+                <td><%= contact.email %></td>
+                <td><%= contact.message %></td>
+                <td><%= contact.createdAt.toLocaleString() %></td>
+            </tr>
+        <% }); %>
+    </tbody>
+    </table>
+    <a href="/" class="btn">Go Back to Home</a>
+ 
+
+<link rel="stylesheet" href="/css/contactList.css"> <!-- Link the stylesheet -->

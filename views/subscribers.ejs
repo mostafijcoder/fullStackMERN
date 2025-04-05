@@ -1,55 +1,56 @@
-<link rel="stylesheet" href="/css/subscribers.css">  <!-- ✅ Link the stylesheet -->
+<link rel="stylesheet" href="/css/subscribers.css">
 
 <div class="container">
     <h1>Subscribers List</h1>
 
-    <!-- ✅ Search form to filter by ZIP Code -->
-    <form id="searchForm">
+    <!-- Search by ZIP Code -->
+    <form id="searchForm" method="GET" action="/subscribers/searchByZip">
         <label for="zipCode">Search by ZIP Code:</label>
-        <input type="number" id="zipCode" name="zipCode" required placeholder="Enter ZIP Code">
-        <button type="submit" id="search-btn">Search</button>
+        <input type="number" name="zipCode" required placeholder="Enter ZIP Code">
+        <button type="submit">Search</button>
     </form>
 
-    <!-- Table to display subscribers -->
+    <!-- Search by Email -->
+    <form id="emailSearchForm" method="GET" action="/subscribers/searchByEmail">
+        <label for="email">Search by Email:</label>
+        <input type="email" name="email" placeholder="Enter Email">
+        <button type="submit">Search</button>
+    </form>
+
     <table>
         <thead>
             <tr>
                 <th>Serial No.</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Zip Code</th>  
+                <th>Zip Code</th>
+                <th>Enrolled Courses</th>
+                <th>Enrollment Type</th>
             </tr>
         </thead>
-        <tbody id="subscriberTable"> <!-- Added id for dynamic table updates -->
+        <tbody>
             <% subscribers.forEach((subscriber, index) => { %>
                 <tr>
-                    <td><%= index + 1 %></td>  <!-- ✅ Serial Number -->
+                    <td><%= index + 1 %></td>
                     <td><%= subscriber.name %></td>
                     <td><%= subscriber.email %></td>
                     <td><%= subscriber.zipCode %></td>
+                    <td>
+                        <% if (subscriber.courses.length > 0) { %>
+                            <% subscriber.courses.forEach(course => { %>
+                                <p><%= course.title %></p>
+                            <% }) %>
+                        <% } else { %>
+                            No courses enrolled
+                        <% } %>
+                    </td>
+                    <td><%= subscriber.courses.length > 1 ? "Multiple Courses" : "Single Course" %></td>
                 </tr>
-            <% }); %>
+            <% }) %>
         </tbody>
     </table>
 
-    <table>
-        <tr>
-            <th>Subscriber Info</th>
-        </tr>
-        <% subscribers.forEach(subscriber => { %>
-            <tr>
-                <td><%= subscriber.getInfo() %></td>
-            </tr>
-        <% }); %>
-    </table>
-    
     <a href="/" class="btn">Go Back to Home</a>
 </div>
 
-<input type="text" id="zipCodeInput" placeholder="Enter Zip Code">
-<button id="searchByZip">Find Local Subscribers</button>
-
-<div id="results"></div>
-
 <script src="/js/subscribers.js"></script>
-

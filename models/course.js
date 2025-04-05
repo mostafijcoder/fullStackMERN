@@ -7,18 +7,24 @@ const courseSchema = new Schema({
     required: true,
     unique: true, // Ensures course titles are unique
   },
+
   description: {
     type: String, // Short description of the course
     required: true
   },
   items: [String], // Array of items/ingredients included in the course
+  cost: {
+    type: Number,
+    required: true,
+    min: [0, "Cost cannot be negative"], // Ensures cost is not negative
+  },
   zipCodes: [{ type: Number, min: [10000, "Zip code too short"], max: 99999 }], // Array of ZIP codes where the course is available
   subscribers: [
     {
       type: Schema.Types.ObjectId,
       ref: "Subscriber", // References the Subscriber model
-    },
-  ],
+    }
+  ]
 });
 
 module.exports = mongoose.model("Course", courseSchema);

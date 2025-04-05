@@ -1,0 +1,11 @@
+/* Contact List table Styles */
+table.contact-list {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+body {
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+

@@ -1,19 +1,36 @@
+/* enroll.css */
 .container {
-    max-width: 500px;
-    margin: auto;
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
     text-align: center;
 }
 
-select, input, button {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 10px;
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin: 10px 0 5px;
+}
+
+input, select {
+    padding: 8px;
+    margin-bottom: 10px;
 }
 
 button {
-    background-color: #007bff;
+    padding: 10px;
+    background-color: #4CAF50;
     color: white;
     border: none;
     cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
 }

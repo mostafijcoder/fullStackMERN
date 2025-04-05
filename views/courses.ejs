@@ -1,5 +1,19 @@
+<link rel="stylesheet" href="/css/courses.css">
+
 <h1>Our Courses</h1>
-<% offeredCourses.forEach(course => { %>
- <h5> <%= course.title %> </h5>
- <span>$ <%= course.cost %> </span>
-<% }); %>
+
+<div class="course-container">
+  <% offeredCourses.forEach(course => { %>
+    <div class="course-card">
+      <h3><%= course.title %></h3>
+      <p><strong>Description:</strong> <%= course.description %></p>
+      <p><strong>Course Content:</strong></p>
+      <ul>
+        <% course.items.forEach(item => { %>
+          <li><%= item %></li>
+        <% }); %>
+      </ul>
+      <span>Price: $<%= course.cost %></span>
+    </div>
+  <% }); %>
+</div>

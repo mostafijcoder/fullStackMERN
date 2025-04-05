@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrolled Subscribers</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Enrolled Subscribers</h1>
+
+    <% if (subscribers.length > 0) { %>
+        <ul>
+            <% subscribers.forEach(subscriber => { %>
+                <li><strong><%= subscriber.name %></strong> - <%= subscriber.email %> - Course: <%= subscriber.courses[0].title %></li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No subscribers found.</p>
+    <% } %>
+
+    <a href="/">Go Back</a>
+</body>
+</html>

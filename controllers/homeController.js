@@ -1,20 +1,12 @@
-var courses = [
-    {
-    title: "Event Driven Cakes",
-    cost: 50
-    },
-    {
-    title: "Asynchronous Artichoke",
-    cost: 25
-    },
-    {
-    title: "Object Oriented Orange Juice",
-    cost: 10
-    }
-   ];
+// Import the courses data from mongoDB courses collection and export it
+const Course = require("../models/course");
 
-exports.showCourses = (req, res) => {
-    res.render("courses", { title: "Courses", courses: courses, showNotification: true, offeredCourses: courses
+ // Fetch all courses from the database
+
+
+exports.showCourses =async (req, res) => {
+    let courses = await Course.find({});
+    res.render("courses", { title: "Courses Available", courses: courses, showNotification: true, offeredCourses: courses
     });
    };
 
@@ -24,11 +16,6 @@ exports.postedSignUpForm = (req, res) => {
 
 
 
-exports.sendReqParam = (req, res) => {
-    let vegetable = req.params.vegetable;
-    res.send(`This is the page for ${vegetable}`);
-};
-// Rendering a view from a controller action in homeController.js
 
 exports.respondWithName = (req, res) => {
     let paramsName = req.params.myName;
@@ -43,4 +30,8 @@ exports.respondWithName = (req, res) => {
     let paramsName = req.params.myName;
     res.render("index", { title: `Hello, ${paramsName}`, name: paramsName, showNotification: true });
 };
+
+exports.showEnroll= (req, res) => {
+    res.render("enroll", { title: "Enroll in a Course", showNotification: true });
+}
 

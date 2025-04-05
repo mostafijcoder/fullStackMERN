@@ -1,18 +1,17 @@
-document.getElementById("enrollForm").addEventListener("submit", function(event) {
+document.getElementById("enrollForm").addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    const subscriberId = document.getElementById("subscriber").value;
-    const courseId = document.getElementById("course").value;
+    const email = document.querySelector("input[name='email']").value;
+    const zipCode = document.querySelector("input[name='zipCode']").value;
+    const courseId = document.querySelector("select[name='courseId']").value;
     const multiple = document.querySelector("input[name='multiple']:checked").value;
 
-    fetch("/enroll", {
+    const response = await fetch("/enroll", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subscriberId, courseId, multiple })
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById("message").innerText = data.message;
-    })
-    .catch(error => console.error("❌ Error:", error));
+        body: JSON.stringify({ email, zipCode, courseId, multiple })
+    });
+
+    const data = await response.json();
+    document.getElementById("message").innerText = data.message;
 });
