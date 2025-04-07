@@ -31,7 +31,3 @@ exports.respondWithName = (req, res) => {
     res.render("index", { title: `Hello, ${paramsName}`, name: paramsName, showNotification: true });
 };
 
-exports.showEnroll= (req, res) => {
-    res.render("enroll", { title: "Enroll in a Course", showNotification: true });
-}
-

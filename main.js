@@ -8,8 +8,6 @@ const contactController = require("./controllers/contactController");
 const path = require("path");
 const Course = require("./models/course");
 
-//const enrollController = require("./controllers/enrollController");
-
 
 const app = express();
 const layouts = require("express-ejs-layouts");
@@ -64,16 +62,9 @@ app.get("/enroll", async (req, res) => {
 
 // POST form handler
 app.post("/enroll", subscribersController.saveSubscriberAndEnrollCourse);
-app.post("/enroll", subscribersController.enroll);
 app.get("/subscribers", subscribersController.getAllSubscribers);
 app.get("/subscribers/searchByEmail", subscribersController.searchByEmail);
 app.get("/subscribers/searchByZip", subscribersController.searchByZip);
-
-// Route to handle enrollment form submission
-app.post("/enroll", subscribersController.enrollSubscriberToCourse);
-
-// Route to view subscribers list
-//app.get("/subscribers", subscribersController.getSubscribers);
 
 //contact route
 app.post("/contact", contactController.saveContact);
@@ -94,27 +85,10 @@ app.get("/name/:myName", homeController.respondWithName);
 // ✅ Fix Subscriber Route
 app.get("/subscribers", subscribersController.getAllSubscribers);
 app.get("/contact", subscribersController.getSubscriptionPage);
-app.get("/enroll", homeController.showEnroll); 
-app.post("/subscribe", subscribersController.saveSubscriber);
-app.get("/subscribers/zip/:zipCode", subscribersController.getLocalSubscribers);
-/*app.get("/subscribers/local", subscribersController.getLocalSubscribers); */
-
-// Course Enrollment Routes
-app.post("/enroll", subscribersController.enrollSubscriberToCourse);
-app.get("/subscribers/:id/courses", subscribersController.getSubscriberWithCourses);
 app.get("/enroll", subscribersController.getEnrollmentPage);
 app.get("/enroll", (req, res) => {
     res.render("enroll", { showNotification: false }); // Ensuring showNotification is always available
 });
-app.get("/enroll", subscribersController.showEnrollPage);
-app.get("/enrolled/single", subscribersController.getSingleCourseEnrollers);
-app.get("/enrolled/multiple", subscribersController.getMultiCourseEnrollers);
-app.get("/search", subscribersController.searchSubscriber);
-
-
-
-
-
 // ✅ Handle 404 Errors
 app.use((req, res) => {
   res.status(404).render("404", { title: "Page Not Found", showNotification: true });

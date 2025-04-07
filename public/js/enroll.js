@@ -1,3 +1,5 @@
+
+/*
 document.getElementById("enrollForm").addEventListener("submit", async function(event) {
     event.preventDefault();
 

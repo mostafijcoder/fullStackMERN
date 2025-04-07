@@ -1,6 +1,6 @@
 
 // subscribers dynamic filtering
-
+/*
     // Existing search form handler
     document.getElementById("searchForm").addEventListener("submit", function(event) {
         event.preventDefault(); // Prevent default form submission
