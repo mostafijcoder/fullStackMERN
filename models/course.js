@@ -25,6 +25,11 @@ const courseSchema = new Schema({
       ref: "Subscriber", // References the Subscriber model
     }
   ]
+
+},
+{
+// Add a timestamps property to record createdAt and updatedAt dates.
+  timestamps: true
 });
 
 module.exports = mongoose.model("Course", courseSchema);

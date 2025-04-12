@@ -4,7 +4,11 @@ const subscriberSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, unique:true, required: true },
     zipCode: { type: Number, required: false },
-    courses : [{type: mongoose.Schema.Types.ObjectId, ref: "Course"}]
+    courses : [{type: mongoose.Schema.Types.ObjectId, ref: "Course"}],
+    subscribedAccount: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+},
+{
+    timestamps: true
 });
 
 subscriberSchema.methods.getInfo = function() {

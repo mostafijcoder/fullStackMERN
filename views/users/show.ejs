@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Profile</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    .container { max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
+    h1 { border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+    p { margin: 10px 0; }
+    a { display: inline-block; margin-top: 20px; color: #007bff; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><%= user.fullName %>'s Profile</h1>
+    <p><strong>Email:</strong> <%= user.email %></p>
+    <p><strong>Zip Code:</strong> <%= user.zipCode %></p>
+    <p><strong>Created At:</strong> <%= user.createdAt.toLocaleString() %></p>
+    <p><strong>Updated At:</strong> <%= user.updatedAt.toLocaleString() %></p>
+
+    <a href="/users">Back to Users List</a>
+  </div>
+</body>
+</html>

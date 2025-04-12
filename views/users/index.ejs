@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Users</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 2rem;
+      background-color: #f8f9fa;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    thead {
+      background-color: #343a40;
+      color: white;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    a.button {
+      padding: 6px 12px;
+      margin: 0 3px;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    a.view {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    a.edit {
+      background-color: #ffc107;
+      color: black;
+    }
+
+    form button {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    form {
+      display: inline;
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .create-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      margin-bottom: 20px;
+    }
+
+    .create-link:hover {
+      background-color: #218838;
+    }
+
+    .back-link {
+      margin-top: 10px;
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>All Users</h1>
+
+  <div class="footer">
+    <a href="/users/new" class="create-link">➕ Create New User</a>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(user => { %>
+        <tr>
+          <td><%= user.fullName %></td>
+          <td><%= user.email %></td>
+          <td>
+            <a href="/users/<%= user._id %>" class="button view">View</a>
+            <a href="/users/<%= user._id %>/edit" class="button edit">Edit</a>
+            <form action="/users/<%= user._id %>?_method=DELETE" method="POST">
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <a href="/" class="back-link">⬅ Back to Home</a>
+
+</body>
+</html>

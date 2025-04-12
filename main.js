@@ -1,4 +1,7 @@
 const express = require("express");
+const userController = require("./controllers/userController"); // Import userController
+
+ // support PUT and DELETE in forms
 const homeController = require("./controllers/homeController");
 const errorController = require("./controllers/errorController");
 const Subscriber = require("./models/subscriber");
@@ -10,6 +13,9 @@ const Course = require("./models/course");
 
 
 const app = express();
+const methodOverride = require("method-override");
+app.use(methodOverride("_method"));
+
 const layouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
 mongoose.Promise= global.Promise;
@@ -53,7 +59,14 @@ app.use((req, res, next) => {
   console.log(`Request made to: ${req.url}`);
   next();
 });
-
+// USER ROUTES
+app.get("/users", userController.index);
+app.get("/users/new", userController.new);
+app.post("/users/create", userController.create,userController.index);
+app.get("/users/:id", userController.show);
+app.get("/users/:id/edit", userController.edit);
+app.put("/users/:id", userController.update);
+app.delete("/users/:id", userController.delete);
 // Route to show the enrollment form
 app.get("/enroll", async (req, res) => {
   const courses = await Course.find();
