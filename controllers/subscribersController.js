@@ -3,6 +3,7 @@ const Subscriber = require("../models/subscriber");
 const Course = require("../models/course"); // ✅ Import the Course model
 
 
+
 exports.getSubscriptionPage = (req, res) => {
     res.render("contact");
 };

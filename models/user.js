@@ -37,7 +37,12 @@ const UserSchema = new Schema({
   subscribedAccount: {
     type: Schema.Types.ObjectId,
     ref: "Subscriber"
+  },
+  profilePicture: {
+    type: String, // assume it will be a URL or local path
+    default: ""   // or provide a default image path if needed
   }
+
 }, {
   timestamps: true
 });
@@ -49,19 +54,22 @@ UserSchema.virtual("fullName").get(function () {
 
 UserSchema.pre("save", function (next) {
   let user = this;
-  if (user.subscribedAccount === undefined) {
+  if (!user.subscribedAccount) {
     Subscriber.findOne({ email: user.email })
       .then(subscriber => {
         if (subscriber) {
           user.subscribedAccount = subscriber._id;
 
-          // Also copy the courses from the subscriber to the user
           if (subscriber.courses && subscriber.courses.length > 0) {
             user.courses = subscriber.courses;
           }
+
+          // 🔄 Set reverse reference
+          subscriber.subscribedAccount = user._id;
+          return subscriber.save(); // <--- Save reverse association too
         }
-        next();
       })
+      .then(() => next())
       .catch(error => {
         console.log(`Error in pre-save subscriber association: ${error.message}`);
         next(error);

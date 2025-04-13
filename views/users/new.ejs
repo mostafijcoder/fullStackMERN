@@ -1,37 +1,117 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>Create New User</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 2rem; }
-    form { max-width: 500px; margin: auto; }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    input { width: 100%; padding: 8px; margin-top: 5px; }
-    button { margin-top: 15px; padding: 10px 15px; background-color: #28a745; color: white; border: none; cursor: pointer; }
-    button:hover { background-color: #218838; }
-    a { display: block; margin-top: 20px; color: #007bff; text-decoration: none; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f5f5f5;
+    }
+    .form-container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+    }
+    video, canvas {
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
-  <h1>Create New User</h1>
-  <form action="/users/create" method="POST">
-    <label>First Name:</label>
-    <input type="text" name="name.first" required />
+  <div class="form-container">
+    <h1>Create New User</h1>
+    <form action="/users/create" method="POST" enctype="multipart/form-data">
+      <label>First Name:
+        <input type="text" name="firstName" required>
+      </label>
+      
+      <label>Last Name:
+        <input type="text" name="lastName" required>
+      </label>
+      
 
-    <label>Last Name:</label>
-    <input type="text" name="name.last" required />
+      <label>Email:
+        <input type="email" name="email" required>
+      </label>
 
-    <label>Email:</label>
-    <input type="email" name="email" required />
+      <label>Password:
+        <input type="password" name="password" required>
+      </label>
 
-    <label>Zip Code:</label>
-    <input type="number" name="zipCode" required />
+      <label>Zip Code:
+        <input type="text" name="zipCode" required>
+      </label>
 
-    <label>Password:</label>
-    <input type="password" name="password" required />
+      <label>
+        <input type="checkbox" name="isAdmin"> Is Admin
+      </label>
 
-    <button type="submit">Create User</button>
-  </form>
-  <a href="/users">Back to Users List</a>
+      <label>Profile Picture:
+        <input type="file" name="profilePicture" accept="image/*" id="profilePictureInput">
+      </label>
+
+      <label>Or take a picture using your camera:</label>
+      <video id="video" autoplay playsinline></video>
+      <button type="button" id="captureBtn">Capture Photo</button>
+      <canvas id="canvas" style="display: none;"></canvas>
+      <!-- This hidden file input will receive the captured image -->
+      <input type="hidden" name="capturedImage" id="capturedImage">
+
+      <button type="submit" style="margin-top: 20px;">Create User</button>
+    </form>
+  </div>
+
+  <script>
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const captureBtn = document.getElementById("captureBtn");
+    const profileInput = document.getElementById("profilePictureInput");
+    const hiddenImageInput = document.getElementById("capturedImage");
+
+    // Start video stream
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        console.error("Camera access denied:", err);
+      });
+
+    // Capture image on button click
+    captureBtn.addEventListener("click", () => {
+      const context = canvas.getContext("2d");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      canvas.style.display = "block";
+
+      // Convert canvas to base64 and store in hidden input
+      const imageDataURL = canvas.toDataURL("image/jpeg");
+      hiddenImageInput.value = imageDataURL;
+
+      // Clear file input if a photo was taken
+      profileInput.value = "";
+    });
+  </script>
 </body>
 </html>
