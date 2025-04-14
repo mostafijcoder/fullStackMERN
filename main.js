@@ -90,6 +90,12 @@ app.get("/subscribers", subscribersController.getAllSubscribers);
 app.get("/subscribers/searchByEmail", subscribersController.searchByEmail);
 app.get("/subscribers/searchByZip", subscribersController.searchByZip);
 app.get("/contact", subscribersController.getSubscriptionPage); // For form view
+// ✅ Subscriber CRUD Routes
+app.get("/subscribers/:id", subscribersController.show);
+app.get("/subscribers/:id/edit", subscribersController.edit);
+app.put("/subscribers/:id", subscribersController.update);
+app.delete("/subscribers/:id", subscribersController.delete);
+
 
 // ✅ Contact Routes
 app.post("/contact", contactController.saveContact);

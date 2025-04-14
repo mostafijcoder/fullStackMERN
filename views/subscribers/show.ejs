@@ -1,0 +1,11 @@
+<h1>Subscriber Details</h1>
+<p><strong>Name:</strong> <%= subscriber.name %></p>
+<p><strong>Email:</strong> <%= subscriber.email %></p>
+<p><strong>Zip Code:</strong> <%= subscriber.zipCode %></p>
+<p><strong>Courses Enrolled:</strong></p>
+<ul>
+  <% subscriber.courses.forEach(course => { %>
+    <li><%= course.title %></li>
+  <% }) %>
+</ul>
+<a href="/subscribers" class="btn">Back to List</a>

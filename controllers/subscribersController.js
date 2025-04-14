@@ -127,3 +127,39 @@ exports.searchByZip = async (req, res) => {
 
   res.render("subscribers", { subscribers });
 };
+
+// Show individual subscriber
+exports.show = async (req, res) => {
+  const { id } = req.params;
+  const subscriber = await Subscriber.findById(id).populate("courses");
+  if (!subscriber) return res.status(404).send("Subscriber not found");
+  res.render("subscribers/show", { subscriber });
+};
+
+// Render edit form
+exports.edit = async (req, res) => {
+  const { id } = req.params;
+  const subscriber = await Subscriber.findById(id);
+  const courses = await Course.find();
+  if (!subscriber) return res.status(404).send("Subscriber not found");
+  res.render("subscribers/edit", { subscriber, courses });
+};
+
+// Update subscriber
+exports.update = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, zipCode, courseIds } = req.body;
+  const subscriber = await Subscriber.findByIdAndUpdate(id, {
+    name,
+    email,
+    zipCode,
+    courses: courseIds
+  }, { new: true });
+  res.redirect("/subscribers");
+};
+
+// Delete subscriber
+exports.delete = async (req, res) => {
+  await Subscriber.findByIdAndDelete(req.params.id);
+  res.redirect("/subscribers");
+};

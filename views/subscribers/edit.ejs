@@ -1,0 +1,27 @@
+<h1>Edit Subscriber</h1>
+<form method="POST" action="/subscribers/<%= subscriber._id %>?_method=PUT">
+  <label>Name:</label>
+  <input type="text" name="name" value="<%= subscriber.name %>" required />
+
+  <label>Email:</label>
+  <input type="email" name="email" value="<%= subscriber.email %>" required />
+
+  <label>ZIP Code:</label>
+  <input type="number" name="zipCode" value="<%= subscriber.zipCode %>" required />
+
+  <label>Courses:</label><br/>
+  <% courses.forEach(course => { %>
+    <label>
+      <input
+        type="checkbox"
+        name="courseIds"
+        value="<%= course._id %>"
+        <%= subscriber.courses.includes(course._id) ? "checked" : "" %>
+      />
+      <%= course.title %>
+    </label><br/>
+  <% }) %>
+
+  <button type="submit" class="btn">Update</button>
+</form>
+<a href="/subscribers" class="btn">Cancel</a>

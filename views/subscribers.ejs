@@ -26,6 +26,7 @@
                 <th>Zip Code</th>
                 <th>Enrolled Courses</th>
                 <th>Enrollment Type</th>
+                <th>Actions</th> <!-- ✅ New -->
             </tr>
         </thead>
         <tbody>
@@ -45,10 +46,20 @@
                         <% } %>
                     </td>
                     <td><%= subscriber.courses.length > 1 ? "Multiple Courses" : "Single Course" %></td>
+    
+                    <!-- ✅ Action Buttons -->
+                    <td>
+                        <a href="/subscribers/<%= subscriber._id %>" class="btn-view">View</a>
+                        <a href="/subscribers/<%= subscriber._id %>/edit" class="btn-edit">Edit</a>
+                        <form action="/subscribers/<%= subscriber._id %>?_method=DELETE" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-delete" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </td>
                 </tr>
             <% }) %>
         </tbody>
     </table>
+    
 
     <a href="/" class="btn">Go Back to Home</a>
 </div>

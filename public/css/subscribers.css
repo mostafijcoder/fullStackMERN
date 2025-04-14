@@ -1,37 +1,142 @@
-/* subscribers.css */
-.container {
-    width: 80%;
-    margin: 0 auto;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
     padding: 20px;
-}
-
-table {
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: auto;
+    background: #fff;
+    padding: 25px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+  
+  form label {
+    font-size: 14px;
+  }
+  
+  form input, form button {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+  
+  table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
-}
-
-table, th, td {
-    border: 1px solid #ddd;
+    font-size: 14px;
+  }
+  
+  table th, table td {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
     text-align: left;
-}
-
-th, td {
-    padding: 12px;
-}
-
-th {
-    background-color: #4CAF50;
-    color: white;
-}
-
-button, .btn {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
+    vertical-align: top;
+  }
+  
+  th {
+    background-color: #f0f0f0;
+  }
+  
+  td p {
+    margin: 4px 0;
+  }
+  
+  .btn {
+    padding: 6px 10px;
+    margin-top: 10px;
+    font-size: 13px;
     text-decoration: none;
-}
-
-button:hover, .btn:hover {
-    background-color: #45a049;
-}
+    background-color: #3498db;
+    color: white;
+    border-radius: 4px;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    background-color: #2980b9;
+  }
+  
+  .btn-view {
+    background-color: #2ecc71;
+  }
+  
+  .btn-edit {
+    background-color: #f39c12;
+  }
+  
+  .btn-delete {
+    background-color: #e74c3c;
+  }
+  
+  .btn-view:hover {
+    background-color: #27ae60;
+  }
+  
+  .btn-edit:hover {
+    background-color: #d35400;
+  }
+  
+  .btn-delete:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Align buttons in one line */
+  td form,
+  td a {
+    display: inline-block;
+    margin: 2px 3px;
+  }
+  
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+  
+    table th {
+      display: none;
+    }
+  
+    table td {
+      position: relative;
+      padding-left: 50%;
+      border: none;
+      border-bottom: 1px solid #eee;
+    }
+  
+    table td:before {
+      position: absolute;
+      left: 10px;
+      width: 45%;
+      white-space: nowrap;
+      font-weight: bold;
+    }
+  
+    td:nth-of-type(1):before { content: "Serial No."; }
+    td:nth-of-type(2):before { content: "Name"; }
+    td:nth-of-type(3):before { content: "Email"; }
+    td:nth-of-type(4):before { content: "Zip Code"; }
+    td:nth-of-type(5):before { content: "Enrolled Courses"; }
+    td:nth-of-type(6):before { content: "Enrollment Type"; }
+    td:nth-of-type(7):before { content: "Actions"; }
+  }
+  
