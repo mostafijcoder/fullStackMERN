@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const User = require("./user");
 
 const subscriberSchema = new mongoose.Schema({
     name: { type: String, required: true },
@@ -17,8 +18,7 @@ subscriberSchema.methods.getInfo = function() {
 subscriberSchema.statics.findLocalSubscribers = function(zipCode) {
     return this.find({ zipCode: zipCode }).exec();
     }
-
-
+    
 
 const Subscriber = mongoose.model("Subscriber", subscriberSchema);
 module.exports = Subscriber;

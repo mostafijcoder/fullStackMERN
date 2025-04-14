@@ -39,41 +39,52 @@ const UserSchema = new Schema({
     ref: "Subscriber"
   },
   profilePicture: {
-    type: String, // assume it will be a URL or local path
-    default: ""   // or provide a default image path if needed
+    type: String,
+    default: ""
   }
-
 }, {
   timestamps: true
 });
 
-// ✅ Virtual Attribute: fullName
+// ✅ Virtual: Full name
 UserSchema.virtual("fullName").get(function () {
   return `${this.name.first} ${this.name.last}`;
 });
 
-UserSchema.pre("save", function (next) {
-  let user = this;
-  if (!user.subscribedAccount) {
-    Subscriber.findOne({ email: user.email })
-      .then(subscriber => {
-        if (subscriber) {
-          user.subscribedAccount = subscriber._id;
+UserSchema.pre("save", async function (next) {
+  const user = this;
 
-          if (subscriber.courses && subscriber.courses.length > 0) {
-            user.courses = subscriber.courses;
-          }
+  // Run only for new users or when email is changed
+  if (user.isNew || user.isModified("email")) {
+    try {
+      const subscriber = await Subscriber.findOne({ email: user.email.toLowerCase() });
+    
+      if (subscriber) {
+        user.subscribedAccount = subscriber._id;
 
-          // 🔄 Set reverse reference
-          subscriber.subscribedAccount = user._id;
-          return subscriber.save(); // <--- Save reverse association too
+        // Only copy if user.courses is empty
+        if ((!user.courses || user.courses.length === 0) && subscriber.courses.length > 0) {
+          user.courses = subscriber.courses;
         }
-      })
-      .then(() => next())
-      .catch(error => {
-        console.log(`Error in pre-save subscriber association: ${error.message}`);
-        next(error);
-      });
+
+        // Also backlink the user to the subscriber
+        if (!subscriber.subscribedAccount) {
+          subscriber.subscribedAccount = user._id;
+          await subscriber.save();
+        }
+        // ✅ Sync to User if available
+        if (subscriber.subscribedAccount) {
+          await user.findByIdAndUpdate(subscriber.subscribedAccount, {
+            courses: subscriber.courses
+          });
+        }
+      }
+
+      next();
+    } catch (error) {
+      console.error("Error syncing subscriber data to user:", error);
+      next(error);
+    }
   } else {
     next();
   }

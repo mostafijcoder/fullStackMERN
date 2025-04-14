@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Subscriber = require("../models/subscriber");
 const Course = require("../models/course"); // ✅ Import the Course model
+const User = require("../models/user");
 
 
 
@@ -63,6 +64,35 @@ exports.saveSubscriberAndEnrollCourse = async (req, res) => {
     }
 
     await subscriber.save();
+    // ✅ Check if there's an associated User
+    
+let user;
+if (subscriber.subscribedAccount) {
+  user = await User.findById(subscriber.subscribedAccount);
+} else {
+  user = await User.findOne({ email: subscriber.email });
+}
+
+if (user) {
+  // Set reverse link if not already
+  if (!user.subscribedAccount) {
+    user.set("subscribedAccount", subscriber._id);
+  }
+
+
+     // Sync courses (force update)
+    user.set("courses", subscriber.courses);
+    await user.save();
+    console.log("✅ Synced user with subscriber courses:", user.email, user.courses);
+
+  
+  // ✅ Also set reverse on Subscriber if missing
+  if (!subscriber.subscribedAccount) {
+    subscriber.subscribedAccount = user._id;
+    await subscriber.save();
+  }
+}
+
     await course.save();
 
     console.log("✅ Enrollment saved:", { name, email, zipCode, multiple });

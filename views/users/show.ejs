@@ -92,12 +92,16 @@
         <p><strong>Is Admin:</strong> <%= user.isAdmin ? 'Yes' : 'No' %></p>
         <p><strong>Password:</strong> <%= user.password %></p>
         <div>
-          <p class="section-title">Courses Enrolled:</p>
-          <% if (user.courses.length > 0) { %>
-            <p><%= user.courses.map(course => course.title).join(', ') %></p>
-          <% } else { %>
-            <p class="no-courses">No courses enrolled.</p>
-          <% } %>
+          <h3>Courses Enrolled:</h3>
+          <ul>
+            <% if (user.courses.length > 0) { %>
+              <% user.courses.forEach(course => { %>
+                <li><%= course.title %></li>
+              <% }); %>
+            <% } else { %>
+              <li>No courses enrolled.</li>
+            <% } %>
+          </ul>
         </div>
       </div>
       <% if (user.profilePicture) { %>
