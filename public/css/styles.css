@@ -103,3 +103,52 @@ main {
 .btn:hover {
     background-color: #0056b3;
 }
+.alert {
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 14px;
+  }
+  
+  .alert-danger {
+    background-color: #f8d7da;
+    color: #842029;
+  }
+  
+  .alert-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+  }
+  .flash {
+    padding: 10px;
+    margin: 10px auto;
+    width: 90%;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .flash-error {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .flash-success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  .alert {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  .alert.success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  .alert.error {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+      

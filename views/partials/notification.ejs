@@ -1,3 +1,11 @@
 <div class="notification">
     <p>🎉 Special Offer! Sign up today for a free cooking lesson.</p>
 </div>
+<div>
+<% if (messages.success) { %>
+    <div class="alert success"><%= messages.success %></div>
+  <% } %>
+  <% if (messages.error) { %>
+    <div class="alert error"><%= messages.error %></div>
+  <% } %>
+</div>

@@ -1,11 +1,11 @@
+// controllers/usersController.js
 const User = require("../models/user");
 const Subscriber = require("../models/subscriber");
 const Course = require("../models/course");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-
-
+const bcrypt = require("bcryptjs");
 
 // Multer config
 const storage = multer.diskStorage({
@@ -16,9 +16,7 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${file.originalname}`);
   }
 });
-
 const upload = multer({ storage });
-
 exports.upload = upload.single("profilePicture");
 
 exports.index = async (req, res) => {
@@ -33,12 +31,9 @@ exports.new = (req, res) => {
 exports.create = async (req, res) => {
   try {
     let profilePath = null;
-
     if (req.file) {
-      // uploaded via file input
       profilePath = `/uploads/${req.file.filename}`;
     } else if (req.body.capturedImage) {
-      // captured from camera
       const base64Data = req.body.capturedImage.replace(/^data:image\/jpeg;base64,/, "");
       const fileName = `capture-${Date.now()}.jpg`;
       const filePath = path.join("public/uploads", fileName);
@@ -46,25 +41,54 @@ exports.create = async (req, res) => {
       profilePath = `/uploads/${fileName}`;
     }
 
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
     const newUser = new User({
       name: {
         first: req.body.firstName,
         last: req.body.lastName
       },
       email: req.body.email,
-      password: req.body.password,
+      password: hashedPassword,
       zipCode: req.body.zipCode,
       isAdmin: req.body.isAdmin === "on",
       profilePicture: profilePath
     });
-    
 
     await newUser.save();
-    res.redirect("/users");
+    req.flash("success", "Account created successfully. Please log in.");
+    res.redirect("/users/login");
   } catch (err) {
+    req.flash("error", "Failed to create account. Please try again.");
     console.error("Error creating user:", err);
-    res.status(500).send("Error creating user");
+    res.redirect("/users/new");
   }
+};
+
+exports.login = (req, res) => {
+  res.render("users/login", { title: "Login" });
+};
+
+exports.authenticate = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (user && await bcrypt.compare(req.body.password, user.password)) {
+      req.flash("success", `Welcome back, ${user.name.first}!`);
+      res.locals.redirect = `/users/${user._id}`;
+    } else {
+      req.flash("error", "Your account or password is incorrect. Please try again or contact your system admin.");
+      res.locals.redirect = "/users/login";
+    }
+    next();
+  } catch (err) {
+    console.error("Login error:", err);
+    next(err);
+  }
+};
+
+exports.redirectView = (req, res) => {
+  const redirectPath = res.locals.redirect || "/";
+  res.redirect(redirectPath);
 };
 
 exports.show = async (req, res) => {

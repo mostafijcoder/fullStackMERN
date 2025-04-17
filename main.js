@@ -9,9 +9,15 @@ const homeController = require("./controllers/homeController");
 const errorController = require("./controllers/errorController");
 const subscribersController = require("./controllers/subscribersController");
 const contactController = require("./controllers/contactController");
+const usersController = require("./controllers/userController");
 
 const seedCourses = require("./seedCourses");
 const Course = require("./models/course");
+require("dotenv").config();
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
+const bcrypt = require("bcryptjs");
 
 // ✅ Multer setup for profile picture upload
 const multer = require("multer");
@@ -22,6 +28,38 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const app = express();
+
+// Cookie and session config
+app.use(cookieParser("secret_passcode"));
+app.use(session({
+  secret: process.env.SECRET,   // Securely loaded from .env
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 60000, // 1 minute (change as needed)
+    httpOnly: true,
+    secure: false // use true in production with HTTPS
+  }
+}));
+
+// Flash messages
+app.use(flash());
+
+// Make flash messages available in all views
+app.use((req, res, next) => {
+  res.locals.flashMessages = req.flash();
+  next();
+});
+
+// main.js (or app.js, wherever Express is configured)
+
+// Must be added AFTER `express-session` and `connect-flash()` middleware
+app.use((req, res, next) => {
+  res.locals.messages = req.flash();
+  res.locals.showNotification = true; // optionally control when to show
+  next();
+});
+
 
 // ✅ Middleware
 app.use(methodOverride("_method"));
@@ -72,6 +110,8 @@ app.get("/contact", (req, res) => {
 app.post("/contact", homeController.postedSignUpForm);
 
 // ✅ User Routes (with profile picture upload)
+app.get("/users/login", usersController.login);
+app.post("/users/login", usersController.authenticate, usersController.redirectView);
 app.get("/users", userController.index);
 app.get("/users/new", userController.new);
 app.post("/users/create", userController.upload, userController.create);

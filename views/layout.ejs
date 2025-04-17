@@ -16,7 +16,23 @@
     <% } %>
 
     <main>
-        <%- body %> <!-- Page-specific content will be inserted here -->
+            <% if (flashMessages.error) { %>
+              <div class="flash flash-error">
+                <% flashMessages.error.forEach(msg => { %>
+                  <p><%= msg %></p>
+                <% }) %>
+              </div>
+            <% } %>
+          
+            <% if (flashMessages.success) { %>
+              <div class="flash flash-success">
+                <% flashMessages.success.forEach(msg => { %>
+                  <p><%= msg %></p>
+                <% }) %>
+              </div>
+            <% } %>
+          
+            <%- body %> <!-- Page-specific content -->
     </main>
 
     <footer>
