@@ -1,42 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= typeof title !== "undefined" ? title : "Recipe App" %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== "undefined" ? title : "Recipe App" %></title>
 
-    <link rel="stylesheet" href="/css/styles.css">
+  <!-- Add Bootstrap or your own CSS here -->
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <%- include("partials/navigation") %> <!-- ✅ Fixed include syntax -->
+  <%- include("partials/navigation") %>
 
-    <% if (typeof showNotification !== "undefined" && showNotification) { %>
+  <% if (typeof showNotification !== "undefined" && showNotification) { %>
+    <%- include("partials/notification") %>
+  <% } %>
 
-        <%- include("partials/notification") %> <!-- ✅ Fixed include syntax -->
+  <main class="container mt-4">
+    <% if (flashMessages.error) { %>
+      <div class="alert alert-danger">
+        <% flashMessages.error.forEach(msg => { %>
+          <p><%= msg %></p>
+        <% }) %>
+      </div>
     <% } %>
 
-    <main>
-            <% if (flashMessages.error) { %>
-              <div class="flash flash-error">
-                <% flashMessages.error.forEach(msg => { %>
-                  <p><%= msg %></p>
-                <% }) %>
-              </div>
-            <% } %>
-          
-            <% if (flashMessages.success) { %>
-              <div class="flash flash-success">
-                <% flashMessages.success.forEach(msg => { %>
-                  <p><%= msg %></p>
-                <% }) %>
-              </div>
-            <% } %>
-          
-            <%- body %> <!-- Page-specific content -->
-    </main>
+    <% if (flashMessages.success) { %>
+      <div class="alert alert-success">
+        <% flashMessages.success.forEach(msg => { %>
+          <p><%= msg %></p>
+        <% }) %>
+      </div>
+    <% } %>
 
-    <footer>
-        <p>&copy; 2025 Confetti Cuisine</p>
-    </footer>
+    <%- body %>
+  </main>
+
+  <footer class="text-center py-4 text-muted bg-light mt-5">
+    <p>&copy; 2025 Confetti Cuisine</p>
+  </footer>
 </body>
 </html>

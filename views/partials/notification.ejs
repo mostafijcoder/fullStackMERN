@@ -2,10 +2,11 @@
     <p>🎉 Special Offer! Sign up today for a free cooking lesson.</p>
 </div>
 <div>
-<% if (messages.success) { %>
+  <% if (messages && messages.success) { %>
     <div class="alert success"><%= messages.success %></div>
   <% } %>
-  <% if (messages.error) { %>
+  <% if (messages && messages.error) { %>
     <div class="alert error"><%= messages.error %></div>
   <% } %>
+  
 </div>

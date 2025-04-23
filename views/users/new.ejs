@@ -35,12 +35,37 @@
       margin-top: 10px;
       border-radius: 8px;
     }
+    .flash-message {
+      background-color: #ffe0e0;
+      color: #b30000;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .flash-success {
+      background-color: #e0ffe0;
+      color: #006600;
+    }
   </style>
 </head>
 <body>
   <div class="form-container">
     <h1>Create New User</h1>
-    <form action="/users/create" method="POST" enctype="multipart/form-data">
+
+    <% if (flashMessages.error && flashMessages.error.length > 0) { %>
+      <div class="flash-message">
+        <%= flashMessages.error[0] %>
+      </div>
+    <% } %>
+
+    <% if (flashMessages.success && flashMessages.success.length > 0) { %>
+      <div class="flash-message flash-success">
+        <%= flashMessages.success[0] %>
+      </div>
+    <% } %>
+
+    <form action="/users" method="POST" enctype="multipart/form-data">
       <label>First Name:
         <input type="text" name="firstName" required>
       </label>
@@ -48,7 +73,6 @@
       <label>Last Name:
         <input type="text" name="lastName" required>
       </label>
-      
 
       <label>Email:
         <input type="email" name="email" required>
@@ -66,7 +90,7 @@
         <input type="checkbox" name="isAdmin"> Is Admin
       </label>
 
-      <label>Profile Picture:
+      <label>Upload Profile Picture:
         <input type="file" name="profilePicture" accept="image/*" id="profilePictureInput">
       </label>
 
@@ -74,7 +98,6 @@
       <video id="video" autoplay playsinline></video>
       <button type="button" id="captureBtn">Capture Photo</button>
       <canvas id="canvas" style="display: none;"></canvas>
-      <!-- This hidden file input will receive the captured image -->
       <input type="hidden" name="capturedImage" id="capturedImage">
 
       <button type="submit" style="margin-top: 20px;">Create User</button>
@@ -105,11 +128,10 @@
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
       canvas.style.display = "block";
 
-      // Convert canvas to base64 and store in hidden input
       const imageDataURL = canvas.toDataURL("image/jpeg");
       hiddenImageInput.value = imageDataURL;
 
-      // Clear file input if a photo was taken
+      // Clear file input
       profileInput.value = "";
     });
   </script>

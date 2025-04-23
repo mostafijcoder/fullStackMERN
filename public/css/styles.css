@@ -152,3 +152,149 @@ main {
     color: #721c24;
   }
       
+  .auth-area {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .nav-btn {
+    padding: 6px 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .nav-btn:hover {
+    background-color: #218838;
+  }
+  
+  .user-info {
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .badge {
+    background-color: #28a745;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    margin-left: 5px;
+  }
+  .hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff3e0;
+  padding: 30px 20px;
+  border-radius: 12px;
+  margin: 20px auto;
+  max-width: 1000px;
+  flex-wrap: wrap;
+}
+
+.hero-img {
+  width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin-right: 30px;
+  flex-shrink: 0;
+}
+
+.hero-text {
+  max-width: 500px;
+}
+
+.hero-text h1 {
+  font-size: 2.5rem;
+  color: #e65100;
+}
+
+.hero-text p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.features {
+  background-color: #fff;
+  padding: 40px 20px;
+  margin: 30px auto;
+  border-radius: 12px;
+  max-width: 1000px;
+}
+
+.features h2 {
+  text-align: center;
+  color: #2e7d32;
+  margin-bottom: 30px;
+}
+
+.feature-list {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.feature {
+  background-color: #f9f9f9;
+  padding: 20px;
+  width: 280px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.feature h3 {
+  color: #4caf50;
+  margin-bottom: 10px;
+}
+
+.feature p {
+  color: #555;
+}
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff3e0;
+  padding: 50px 40px;
+  border-radius: 16px;
+  margin: 40px auto;
+  max-width: 1200px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.hero-img {
+  flex: 1;
+  max-width: 500px;
+  height: auto;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.hero-text {
+  flex: 1;
+  padding-left: 40px;
+  text-align: left;
+}
+
+.hero-text h1 {
+  font-size: 3rem;
+  color: #e65100;
+  margin-bottom: 20px;
+}
+
+.hero-text p {
+  font-size: 1.3rem;
+  color: #444;
+  line-height: 1.6;
+}

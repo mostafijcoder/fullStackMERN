@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Subscriber = require("./subscriber");
+const passportLocalMongoose = require("passport-local-mongoose");
 
 const UserSchema = new Schema({
   name: {
@@ -26,10 +27,6 @@ const UserSchema = new Schema({
     min: [10000, "Zip code too short"],
     max: 99999
   },
-  password: {
-    type: String,
-    required: true
-  },
   courses: [{
     type: Schema.Types.ObjectId,
     ref: "Course"
@@ -51,30 +48,28 @@ UserSchema.virtual("fullName").get(function () {
   return `${this.name.first} ${this.name.last}`;
 });
 
+// ✅ Sync Subscriber on user creation
 UserSchema.pre("save", async function (next) {
   const user = this;
 
-  // Run only for new users or when email is changed
   if (user.isNew || user.isModified("email")) {
     try {
       const subscriber = await Subscriber.findOne({ email: user.email.toLowerCase() });
-    
+
       if (subscriber) {
         user.subscribedAccount = subscriber._id;
 
-        // Only copy if user.courses is empty
         if ((!user.courses || user.courses.length === 0) && subscriber.courses.length > 0) {
           user.courses = subscriber.courses;
         }
 
-        // Also backlink the user to the subscriber
         if (!subscriber.subscribedAccount) {
           subscriber.subscribedAccount = user._id;
           await subscriber.save();
         }
-        // ✅ Sync to User if available
+
         if (subscriber.subscribedAccount) {
-          await user.findByIdAndUpdate(subscriber.subscribedAccount, {
+          await mongoose.model("User").findByIdAndUpdate(subscriber.subscribedAccount, {
             courses: subscriber.courses
           });
         }
@@ -90,5 +85,9 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
+// ✅ Passport plugin: manage hashing + login with email
+UserSchema.plugin(passportLocalMongoose, {
+  usernameField: "email"
+});
 
 module.exports = mongoose.model("User", UserSchema);
