@@ -16,20 +16,22 @@
   <% } %>
 
   <main class="container mt-4">
-    <% if (flashMessages.error) { %>
-      <div class="alert alert-danger">
-        <% flashMessages.error.forEach(msg => { %>
-          <p><%= msg %></p>
-        <% }) %>
-      </div>
-    <% } %>
+    <% if (typeof flashMessages !== "undefined") { %>
+      <% if (flashMessages.error) { %>
+        <div class="alert alert-danger">
+          <% flashMessages.error.forEach(msg => { %>
+            <p><%= msg %></p>
+          <% }) %>
+        </div>
+      <% } %>
 
-    <% if (flashMessages.success) { %>
-      <div class="alert alert-success">
-        <% flashMessages.success.forEach(msg => { %>
-          <p><%= msg %></p>
-        <% }) %>
-      </div>
+      <% if (flashMessages.success) { %>
+        <div class="alert alert-success">
+          <% flashMessages.success.forEach(msg => { %>
+            <p><%= msg %></p>
+          <% }) %>
+        </div>
+      <% } %>
     <% } %>
 
     <%- body %>

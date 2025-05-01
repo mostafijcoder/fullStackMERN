@@ -50,6 +50,10 @@ exports.create = async (req, res, next) => {
       userParams.profilePicture = `/uploads/${req.file.filename}`;
     }
 
+    if (!userParams.profilePicture) {
+      userParams.profilePicture = "/images/cakes"; // assuming you have this in public/images/
+    }
+    
     const newUser = new User(userParams);
     await User.register(newUser, req.body.password); // thanks to passport-local-mongoose
 
@@ -113,7 +117,14 @@ exports.update = async (req, res) => {
     if (req.file) {
       updateData.profilePicture = `/uploads/${req.file.filename}`;
     }
-
+    const existingUser = await User.findById(req.params.id);
+    if (req.file && existingUser.profilePicture && existingUser.profilePicture.startsWith("/uploads")) {
+      const oldPath = path.join("public", existingUser.profilePicture);
+      fs.unlink(oldPath, err => {
+        if (err) console.error("Failed to delete old image:", err);
+      });
+    }
+    
     await User.findByIdAndUpdate(req.params.id, updateData);
     req.flash("success", "User updated successfully.");
     res.redirect(`/users/${req.params.id}`);
@@ -127,6 +138,15 @@ exports.update = async (req, res) => {
 // DELETE: Remove user
 exports.delete = async (req, res) => {
   try {
+    const user = await User.findById(req.params.id);
+  if (user.profilePicture && user.profilePicture.startsWith("/uploads")) {
+  const filePath = path.join("public", user.profilePicture);
+  fs.unlink(filePath, err => {
+    if (err) console.error("Error deleting profile picture:", err);
+  });
+}
+await User.findByIdAndDelete(req.params.id);
+
     await User.findByIdAndDelete(req.params.id);
     req.flash("success", "User deleted.");
     res.redirect("/users");
