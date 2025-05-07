@@ -4,11 +4,21 @@ const Course = require("../models/course");
  // Fetch all courses from the database
 
 
-exports.showCourses =async (req, res) => {
-    let courses = await Course.find({});
-    res.render("courses", { title: "Courses Available", courses: courses, showNotification: true, offeredCourses: courses
+ exports.showCourses = async (req, res) => {
+    const courses = await Course.find();
+    // if the client asked for JSON, send it
+    if (req.query.format === "json") {
+      res.set("Cache-Control", "no-store, private, max-age=0");
+      return res.json(courses);
+    }
+    // otherwise render the normal view
+    res.render("courses", {
+      title: "Courses Available",
+      courses,
+      showNotification: true,
+      offeredCourses: courses,
     });
-   };
+  };
 
 exports.postedSignUpForm = (req, res) => {
     res.render("thanks", { title: "Thank You", showNotification: true });

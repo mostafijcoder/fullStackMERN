@@ -6,10 +6,13 @@
   <title><%= typeof title !== "undefined" ? title : "Recipe App" %></title>
 
   <!-- Add Bootstrap or your own CSS here -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
   <%- include("partials/navigation") %>
+  <%- include("courses/_coursesModal") %>
+
 
   <% if (typeof showNotification !== "undefined" && showNotification) { %>
     <%- include("partials/notification") %>
@@ -40,5 +43,17 @@
   <footer class="text-center py-4 text-muted bg-light mt-5">
     <p>&copy; 2025 Confetti Cuisine</p>
   </footer>
+
+   <!-- jQuery first -->
+   <script src="/js/jquery.min.js"></script>
+
+   <!-- then Bootstrap’s bundle (which includes Popper) -->
+   <script src="/js/bootstrap.bundle.min.js"></script>
+ 
+   <!-- then your own code that depends on them -->
+   <script src="/js/receipeApp.js"></script>
+ </body>
+ </html>
+ 
 </body>
 </html>

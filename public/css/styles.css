@@ -298,3 +298,16 @@ main {
   color: #444;
   line-height: 1.6;
 }
+.modal-backdrop.in {
+  opacity: 0.8;              /* darker fade */
+}
+.modal-body {
+  max-height: 60vh;          /* scroll if too tall */
+  overflow-y: auto;
+}
+.course-item h5 {
+  margin-bottom: .5rem;
+}
+.course-item p {
+  margin: 0;
+}
