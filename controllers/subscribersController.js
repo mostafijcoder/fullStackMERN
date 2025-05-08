@@ -9,20 +9,29 @@ exports.getSubscriptionPage = (req, res) => {
     res.render("contact");
 };
 
-// ✅ Render Enrollment Page
 exports.getEnrollmentPage = async (req, res) => {
-    try {
-        if (mongoose.connection.readyState !== 1) {
-            throw new Error("MongoDB is not connected yet.");
-          }
-        const subscribers = await Subscriber.find({});
-        const courses = await Course.find({});
-        res.render("enroll", { title: "Enroll in a Course", subscribers, courses, showNotification: false });
-    } catch (error) {
-        console.error("❌ Error loading enrollment page:", error);
-        res.status(500).send("Error loading enrollment page.");
-    }
+  try {
+      if (mongoose.connection.readyState !== 1) {
+          throw new Error("MongoDB is not connected yet.");
+      }
+
+      const subscribers = await Subscriber.find({});
+      const courses = await Course.find({});
+      const preselectedCourseId = req.query.courseId || null; // 👈 capture courseId from query
+
+      res.render("enroll", {
+          title: "Enroll in a Course",
+          subscribers,
+          courses,
+          showNotification: false,
+          preselectedCourseId // 👈 pass it to the view
+      });
+  } catch (error) {
+      console.error("❌ Error loading enrollment page:", error);
+      res.status(500).send("Error loading enrollment page.");
+  }
 };
+
 
 // ✅ Handle Enrollment Form Submission
 exports.saveSubscriberAndEnrollCourse = async (req, res) => {

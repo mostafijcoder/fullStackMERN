@@ -17,7 +17,12 @@
         <select name="courseId" required>
             <% if (courses.length > 0) { %>
                 <% courses.forEach(course => { %>
-                    <option value="<%= course._id %>"><%= course.title %></option>
+                    <option 
+                      value="<%= course._id %>" 
+                      <%= String(course._id) === String(preselectedCourseId) ? 'selected' : '' %>
+                    >
+                      <%= course.title %>
+                    </option>
                 <% }); %>
             <% } else { %>
                 <option disabled>No courses available</option>

@@ -1,6 +1,4 @@
 // public/js/recipeApp.js
-$.ajaxSetup({ cache: false });
-
 $(document).ready(function() {
     $('#modal-button').on('click', function() {
       const $body = $('#coursesModal .modal-body');
@@ -18,6 +16,13 @@ $(document).ready(function() {
                 <div class="card-body">
                   <h5 class="card-title">${course.title}</h5>
                   <p class="card-text">${course.description}</p>
+                  <!-- Join button: opens enrollment form with course pre-selected -->
+                  <a 
+                    href="/enroll?courseId=${course._id}" 
+                    class="btn btn-success"
+                  >
+                    Join Course
+                  </a>
                 </div>
               </div>
             `);
