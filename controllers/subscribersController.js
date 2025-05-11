@@ -11,26 +11,39 @@ exports.getSubscriptionPage = (req, res) => {
 
 exports.getEnrollmentPage = async (req, res) => {
   try {
-      if (mongoose.connection.readyState !== 1) {
-          throw new Error("MongoDB is not connected yet.");
-      }
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+      req.flash("error", "Please log in to enroll in a course.");
+      return res.redirect("/users/login");
+    }
 
-      const subscribers = await Subscriber.find({});
-      const courses = await Course.find({});
-      const preselectedCourseId = req.query.courseId || null; // 👈 capture courseId from query
+    const { courseId } = req.query;
+    const user = req.user;
 
-      res.render("enroll", {
-          title: "Enroll in a Course",
-          subscribers,
-          courses,
-          showNotification: false,
-          preselectedCourseId // 👈 pass it to the view
-      });
+    const courses = await Course.find();
+
+    // Safely format full name if name is an object
+    const prefilledName = typeof user.name === "object"
+      ? `${user.name.first || ""} ${user.name.last || ""}`.trim()
+      : user.name || "";
+
+    const prefilledEmail = user.email || "";
+
+    res.render("enroll", {
+      title: "Enroll in a Course",
+      subscribers: [], // You can remove if unused in enroll.ejs
+      courses,
+      showNotification: false,
+      prefilledName,
+      prefilledEmail,
+      preselectedCourseId: courseId || ""
+    });
   } catch (error) {
-      console.error("❌ Error loading enrollment page:", error);
-      res.status(500).send("Error loading enrollment page.");
+    console.error("❌ Error loading enrollment page:", error);
+    res.status(500).send("Error loading enrollment page.");
   }
 };
+
+
 
 
 // ✅ Handle Enrollment Form Submission

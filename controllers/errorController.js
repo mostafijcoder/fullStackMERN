@@ -13,3 +13,20 @@ exports.respondInternalError = (error, req, res, next) => {
  res.send(`${errorCode} | Sorry, our application is 
 ➥experiencing a problem!`);
 };
+exports.errorJSON = (error, req, res, next) => {
+    let errorObject;
+    if (error) {
+      errorObject = {
+        status: 500,
+        message: error.message
+      };
+    } else {
+      errorObject = {
+        status: 500,
+        message: "Unknown Error"
+      };
+    }
+  
+    res.json(errorObject);
+  };
+  

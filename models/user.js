@@ -54,26 +54,31 @@ UserSchema.pre("save", async function (next) {
 
   if (user.isNew || user.isModified("email")) {
     try {
-      const subscriber = await Subscriber.findOne({ email: user.email.toLowerCase() });
+      let subscriber = await Subscriber.findOne({ email: user.email.toLowerCase() });
 
-      if (subscriber) {
-        user.subscribedAccount = subscriber._id;
-
-        if ((!user.courses || user.courses.length === 0) && subscriber.courses.length > 0) {
-          user.courses = subscriber.courses;
-        }
-
+      if (!subscriber) {
+        subscriber = await Subscriber.create({
+          name: `${user.name.first} ${user.name.last}`,
+          email: user.email,
+          zipCode: user.zipCode,
+          courses: user.courses,
+          subscribedAccount: user._id
+        });
+      } else {
+        // Link subscriber to user
         if (!subscriber.subscribedAccount) {
           subscriber.subscribedAccount = user._id;
           await subscriber.save();
         }
 
-        if (subscriber.subscribedAccount) {
-          await mongoose.model("User").findByIdAndUpdate(subscriber.subscribedAccount, {
-            courses: subscriber.courses
-          });
+        // Sync courses if user has none
+        if ((!user.courses || user.courses.length === 0) && subscriber.courses.length > 0) {
+          user.courses = subscriber.courses;
         }
       }
+
+      // Link user to subscriber
+      user.subscribedAccount = subscriber._id;
 
       next();
     } catch (error) {

@@ -18,3 +18,63 @@
     </div>
   </div>
   
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const modalBody = document.querySelector("#coursesModal .modal-body");
+    
+      document.getElementById("modal-button").addEventListener("click", async () => {
+        modalBody.innerHTML = "<p>Loading courses...</p>";
+    
+        try {
+          const res = await fetch("/courses?format=json");
+          const courses = await res.json();
+    
+          modalBody.innerHTML = ""; // Clear loading message
+    
+          courses.forEach(course => {
+            const courseCard = document.createElement("div");
+            courseCard.className = "card mb-3";
+            courseCard.innerHTML = `
+              <div class="card-body">
+                <h5 class="card-title">${course.title}</h5>
+                <p class="card-text">${course.description}</p>
+                <button 
+                  class="btn ${course.joined ? 'btn-secondary' : 'btn-success'} join-btn"
+                  ${course.joined ? 'disabled' : ''}
+                  data-course-id="${course._id}">
+                  ${course.joined ? 'Already Joined' : 'Join Course'}
+                </button>
+              </div>
+            `;
+            modalBody.appendChild(courseCard);
+          });
+    
+          // Add event listeners for Join buttons
+          document.querySelectorAll(".join-btn").forEach(button => {
+            button.addEventListener("click", async () => {
+              const courseId = button.getAttribute("data-course-id");
+              try {
+                const response = await fetch(`/courses/join/${courseId}`, { method: "POST" });
+                const data = await response.json();
+                if (data.success) {
+                  button.textContent = "Already Joined";
+                  button.classList.remove("btn-success");
+                  button.classList.add("btn-secondary");
+                  button.disabled = true;
+                } else {
+                  alert(data.message || "Failed to join course.");
+                }
+              } catch (err) {
+                console.error("Join failed:", err);
+                alert("An error occurred while joining the course.");
+              }
+            });
+          });
+        } catch (error) {
+          console.error("Error loading courses:", error);
+          modalBody.innerHTML = "<p class='text-danger'>Failed to load courses.</p>";
+        }
+      });
+    });
+    </script>
+    

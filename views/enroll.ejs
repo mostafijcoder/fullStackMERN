@@ -1,45 +1,55 @@
 <link rel="stylesheet" href="/css/enroll.css">
 
 <div class="container">
-    <h1>Enroll in a Course</h1>
+  <h1>Enroll in a Course</h1>
 
-    <form action="/enroll" method="POST">
-        <label for="subscriberName">Name:</label>
-        <input type="text" name="name" required>
+  <form action="/enroll" method="POST">
+    <label for="subscriberName">Name:</label>
+    <input 
+      type="text" 
+      name="name" 
+      required 
+      value="<%= typeof prefilledName !== 'undefined' ? prefilledName : '' %>"
+    >
 
-        <label for="subscriberEmail">Email:</label>
-        <input type="email" name="email" required>
+    <label for="subscriberEmail">Email:</label>
+    <input 
+      type="email" 
+      name="email" 
+      required 
+      value="<%= typeof prefilledEmail !== 'undefined' ? prefilledEmail : '' %>"
+    >
 
-        <label for="zipCode">Zip Code:</label>
-        <input type="number" name="zipCode" required>
+    <label for="zipCode">Zip Code:</label>
+    <input type="number" name="zipCode" required>
 
-        <label for="course">Select Course:</label>
-        <select name="courseId" required>
-            <% if (courses.length > 0) { %>
-                <% courses.forEach(course => { %>
-                    <option 
-                      value="<%= course._id %>" 
-                      <%= String(course._id) === String(preselectedCourseId) ? 'selected' : '' %>
-                    >
-                      <%= course.title %>
-                    </option>
-                <% }); %>
-            <% } else { %>
-                <option disabled>No courses available</option>
-            <% } %>
-        </select>
+    <label for="course">Select Course:</label>
+    <select name="courseId" required>
+      <% if (courses.length > 0) { %>
+        <% courses.forEach(course => { %>
+          <option 
+            value="<%= course._id %>" 
+            <%= String(course._id) === String(preselectedCourseId) ? 'selected' : '' %>
+          >
+            <%= course.title %>
+          </option>
+        <% }); %>
+      <% } else { %>
+        <option disabled>No courses available</option>
+      <% } %>
+    </select>
 
-        <label>
-            <input type="radio" name="multiple" value="false" checked> Single Course Enrollment
-        </label>
-        <label>
-            <input type="radio" name="multiple" value="true"> Multiple Courses Enrollment
-        </label>
+    <label>
+      <input type="radio" name="multiple" value="false" checked> Single Course Enrollment
+    </label>
+    <label>
+      <input type="radio" name="multiple" value="true"> Multiple Courses Enrollment
+    </label>
 
-        <button type="submit">Enroll</button>
-    </form>
+    <button type="submit">Enroll</button>
+  </form>
 
-    <form action="/subscribers" method="GET">
-        <button type="submit" class="btn">Subscriber Enrolled List</button>
-    </form>
+  <form action="/subscribers" method="GET">
+    <button type="submit" class="btn">Subscriber Enrolled List</button>
+  </form>
 </div>

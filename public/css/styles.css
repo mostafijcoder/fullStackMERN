@@ -311,3 +311,12 @@ main {
 .course-item p {
   margin: 0;
 }
+.joined-button {
+  background-color: gray;
+  cursor: not-allowed;
+}
+
+.joined-button {
+  background-color: #6c757d; /* Bootstrap secondary */
+  border-color: #6c757d;
+}

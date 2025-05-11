@@ -84,3 +84,7 @@ app.use((req, res, next) => {
 // ✅ Use Modular Routes
 const routes = require("./routes");
 app.use("/", routes);
+
+// Routes
+const apiRoutes = require("./routes/apiRoutes");
+app.use("/api", apiRoutes);
