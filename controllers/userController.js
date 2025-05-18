@@ -6,6 +6,35 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
+exports.verifyToken = async (req, res, next) => {
+  const apiToken = req.query.apiToken;
+
+  if (!apiToken) {
+    return next({
+      status: 401,
+      message: "API token required."
+    });
+  }
+
+  try {
+    const user = await User.findOne({ apiToken });
+    if (user) {
+      req.user = user; // attach user to request
+      next();
+    } else {
+      next({
+        status: 403,
+        message: "Invalid API token."
+      });
+    }
+  } catch (error) {
+    next({
+      status: 500,
+      message: "Error verifying token."
+    });
+  }
+};
+
 // Multer config
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "public/uploads/"),

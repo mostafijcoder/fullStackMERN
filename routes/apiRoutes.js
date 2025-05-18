@@ -2,8 +2,10 @@
 const express = require("express");
 const router = express.Router();
 const homeController = require("../controllers/homeController");
+const userController = require("../controllers/userController");
 const errorController = require("../controllers/errorController");
 
+router.use(userController.verifyToken); // Middleware to verify API token
 
 // API route for getting courses as JSON
 router.get("/courses", homeController.index, homeController.respondJSON);

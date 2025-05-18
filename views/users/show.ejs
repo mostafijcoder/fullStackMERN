@@ -117,6 +117,8 @@
       <% } %>
     </ul>
 
+    <p><strong>API Token:</strong> <code><%= user.apiToken %></code></p>
+
     <% if (user.socialProvider) { %>
       <div class="social-login">
         Logged in via <strong><%= user.socialProvider %></strong>
@@ -126,5 +128,10 @@
 
     <a href="/users" class="back-link">← Back to Users List</a>
   </div>
+
+  <!-- ✅ Inject the API token into a global JS variable -->
+  <script>
+    window.apiToken = "<%= user.apiToken %>";
+  </script>
 </body>
 </html>

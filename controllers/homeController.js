@@ -93,25 +93,30 @@ exports.respondJSON = (req, res) => {
 
 exports.joinCourse = async (req, res) => {
   try {
-    if (!req.isAuthenticated || !req.isAuthenticated()) {
-      return res.status(401).json({ success: false, message: "User not logged in." });
+    let user = null;
+
+    // 1. Try session-based auth
+    if (req.isAuthenticated && req.isAuthenticated()) {
+      user = await User.findById(req.user._id);
     }
 
-    const user = await User.findById(req.user._id);
+    // 2. If not logged in, try token-based auth
+    if (!user && req.query.apiToken) {
+      user = await User.findOne({ apiToken: req.query.apiToken });
+    }
+
+    if (!user) {
+      return res.status(401).json({ success: false, message: "User not logged in or token invalid." });
+    }
+
     const courseId = req.params.id;
 
-    if (!user) return res.status(404).json({ success: false, message: "User not found." });
-
-    // Update user's course list
     if (!user.courses.includes(courseId)) {
       user.courses.push(courseId);
       await user.save();
     }
 
-    // Fetch linked subscriber
-    let subscriber = await Subscriber.findOne({ _id: user.subscribedAccount });
-
-    // If subscriber exists and doesn't have this course, update it
+    const subscriber = await Subscriber.findById(user.subscribedAccount);
     if (subscriber && !subscriber.courses.includes(courseId)) {
       subscriber.courses.push(courseId);
       await subscriber.save();
@@ -119,10 +124,13 @@ exports.joinCourse = async (req, res) => {
 
     return res.json({ success: true });
   } catch (error) {
-    console.error("❌ Error joining course:", error);
-    res.status(500).json({ success: false, message: "Internal server error." });
+    console.error("❌ Error in joinCourse:", error);
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
+
+
 
 exports.errorJSON = (error, req, res, next) => {
   const errorObject = {
